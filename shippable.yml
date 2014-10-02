@@ -1,0 +1,24 @@
+language: python
+
+python:
+- "3.4"
+
+install: "pip install -r requirements.txt"
+
+before_script:
+- mkdir -p shippable/testresults
+- pip install .
+
+script:
+- nosetests --with-xunit --xunit-file=shippable/testresults/nosetests.xml -w tests unit.py
+
+notifications:
+email:
+recipients:
+- lucashnegri@gmail.com
+on_success: change
+on_failure: always
+
+branches:
+only:
+- master
