@@ -1,5 +1,5 @@
-from .baseline import baseline
-from .peak import peak_indexes, peak_estimate, gaussian_fit, gaussian, centroid
-from .plot import plot
+from .baseline import *
+from .peak import *
+from .plot import *
 
 __version__ = '0.1.0'
