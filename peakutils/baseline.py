@@ -1,7 +1,7 @@
 import numpy as np
-from numpy.linalg import norm
+import scipy.linalg as LA
 
-def baseline(y, deg=3, max_it=100, tol=1e-3):
+def baseline(y, deg=3, max_it=10, tol=1e-3):
     '''Computes the baseline of a given data.
 
     Iteratively performs a polynomial fitting in the data to detect its
@@ -27,20 +27,24 @@ def baseline(y, deg=3, max_it=100, tol=1e-3):
     Returns
     -------
     ndarray
-        Array with the amplitude of the baseline for every original point in *y*
+        Array with the amplitude of the baseline for every point in *y*
     '''
-    coeffs = np.ones(deg+1)
+    coeffs = np.ones(deg+1) # initial coefficient estimate
+    base = y.copy()         # current baseline estimate
+
+    # speed up the computation by computing the vandermonde and its pinv once
     x = np.arange(y.size)
-    base = y.copy()
+    vander = np.vander(x, deg+1)
+    vander_pinv = LA.pinv2(vander)
 
     for it in range(max_it):
-        coeffs_new = np.polyfit(x, y, deg)
+        coeffs_new = np.dot(vander_pinv, y)
+        base = np.dot(vander, coeffs_new)
 
-        if norm(coeffs_new-coeffs) / norm(coeffs) < tol:
+        if LA.norm(coeffs_new-coeffs) / LA.norm(coeffs) < tol:
             break
 
         coeffs = coeffs_new
-        base = np.polyval(coeffs, x)
         y = np.minimum(y, base)
 
     return base
