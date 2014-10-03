@@ -38,8 +38,8 @@ def baseline(y, deg=3, max_it=10, tol=1e-3):
     vander_pinv = LA.pinv2(vander)
 
     for it in range(max_it):
-        coeffs_new = np.dot(vander_pinv, y)
-        base = np.dot(vander, coeffs_new)
+        coeffs_new = np.dot(vander_pinv, y) # coeffs = pinv(V) y
+        base = np.dot(vander, coeffs_new)   # base = polyval(coeffs, x)
 
         if LA.norm(coeffs_new-coeffs) / LA.norm(coeffs) < tol:
             break
