@@ -2,3 +2,4 @@ __pycache__
 build
 _build
 MANIFEST
+dist

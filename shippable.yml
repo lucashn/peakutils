@@ -3,7 +3,9 @@ language: python
 python:
 - "3.4"
 
-install: "pip install -r requirements.txt"
+install:
+- apt-get install liblapack-dev
+- pip install -r requirements.txt
 
 before_script:
 - mkdir -p shippable/testresults
