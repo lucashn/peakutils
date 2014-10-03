@@ -6,5 +6,5 @@ Topics
 .. _documentation-topics:
 
 .. toctree::
-   tutorial
+   tutorial_a
    reference

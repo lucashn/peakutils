@@ -22,7 +22,8 @@ To install PeakUtils from the source package, run:
 
     python setup.py install
 
-PeakUtils targets Python 3.4 and depends on numpy, scipy, and matplotlib.
+PeakUtils targets Python 3.4 and depends on numpy, scipy, and optionally
+on matplotlib.
 
 Contribute
 ----------
@@ -30,13 +31,6 @@ Contribute
 - Source Code: https://bitbucket.org/lucashnegri/peakutils
 - Issues: https://bitbucket.org/lucashnegri/peakutils/issues
 - Direct contact: Lucas Hermann Negri - lucashnegri <at> gmail.com
-
-TODO
-----
-
-- Optimizations: baseline needs to be optimized!
-- Write tutorial (citing useful smoothing / filtering functions)
-- Publish to Pypi
 
 License
 -------

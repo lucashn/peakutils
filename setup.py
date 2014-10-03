@@ -11,12 +11,12 @@ import numpy
 setup(
     name='PeakUtils',
     version='0.1.0',
-    description='Peak detection utilities',
+    description='Peak detection utilities for 1D data',
     author='Lucas Hermann Negri',
     author_email='lucashnegri@gmail.com',
     url='https://bitbucket.org/lucashnegri/peakutils',
     packages=['peakutils'],
-    install_requires=['numpy', 'scipy', 'matplotlib'],
+    install_requires=['numpy', 'scipy'],
     classifiers=[
         'Development Status :: 4 - Beta',
         'License :: OSI Approved :: MIT License',
