@@ -22,7 +22,7 @@ To install PeakUtils from the source package, run:
 
     python setup.py install
 
-PeakUtils targets Python 3.4 and depends on scipy, and optionally on
+PeakUtils targets Python 3.4 and depends on numpy, scipy, and optionally on
 matplotlib.
 
 Contribute
