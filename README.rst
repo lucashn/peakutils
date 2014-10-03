@@ -1,7 +1,7 @@
 PeakUtils
 =========
 
-.. image:: https://api.shippable.com/projects/54294a2980088cee586cfc7d/badge?branchName=master
+.. image:: https://api.shippable.com/projects/542e077380088cee586d33c4/badge?branchName=master
 .. image:: https://pypip.in/version/PeakUtils/badge.png?style=flat
     :target: https://pypi.python.org/pypi/PeakUtils
     :alt: Latest Version

@@ -1,0 +1,15 @@
+Metadata-Version: 1.1
+Name: PeakUtils
+Version: 0.1.0
+Summary: Peak detection utilities for 1D data
+Home-page: https://bitbucket.org/lucashnegri/peakutils
+Author: Lucas Hermann Negri
+Author-email: lucashnegri@gmail.com
+License: MIT
+Description: UNKNOWN
+Platform: UNKNOWN
+Classifier: Development Status :: 4 - Beta
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Topic :: Scientific/Engineering
