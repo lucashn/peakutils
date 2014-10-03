@@ -4,7 +4,8 @@ python:
 - "3.4"
 
 install:
-- apt-get install liblapack-dev
+- shippable_retry sudo apt-get update 
+- shippable_retry sudo apt-get install liblapack-dev
 - pip install -r requirements.txt
 
 before_script:
