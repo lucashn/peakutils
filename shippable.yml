@@ -5,7 +5,7 @@ python:
 
 install:
 - shippable_retry sudo apt-get update 
-- shippable_retry sudo apt-get install liblapack-dev
+- shippable_retry sudo apt-get install liblapack-dev gfortran
 - pip install -r requirements.txt
 
 before_script:
