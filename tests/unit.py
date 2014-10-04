@@ -8,8 +8,8 @@ def load(name):
     p = os.path.join(os.path.dirname(__file__), name)
     return numpy.loadtxt(p)
 
-# tests performed with experimental data
 class ExperimentalData(unittest.TestCase):
+    '''Tests with experimental data'''
     def setUp(self):
         self.data = []
         self.data.append( (load('noise'), 8) )
@@ -28,8 +28,8 @@ class ExperimentalData(unittest.TestCase):
 
             self.assertEqual(idx.size, n_peaks)
 
-# tests performed with generated data
 class SimulatedData(unittest.TestCase):
+    '''Tests with simulated data (3 peaks + baseline + nois)'''
     def setUp(self):
         self.x = numpy.linspace(0, 100, 1000)
         self.centers = (20, 40, 70)
@@ -57,11 +57,27 @@ class SimulatedData(unittest.TestCase):
                            numpy.linalg.norm(y))
 
         filtered = scipy.signal.savgol_filter(y, 51, 3)
-        idx = peakutils.indexes(filtered, thres=0.3, min_dist=100)
+        idx = peakutils.indexes(filtered, thres=0.25, min_dist=100)
         self.assertEqual(idx.size, 3)
 
         for i, ind in enumerate(idx):
             self.assertAlmostEqual(self.x[ind], self.centers[i], delta=2.)
+
+class Baseline(unittest.TestCase):
+    '''Tests the conditioning of the lsqreg in the implementation'''
+    def setUp(self):
+        self.data = load('exp')
+
+    def test_conditioning(self):
+        x, y = self.data[:,0], self.data[:,1]
+        mult = 1e-6
+
+        while mult < 100001:
+            ny = y * mult
+            base = peakutils.baseline(ny, 9) / mult
+            self.assertTrue(0.8 < base.max() < 1.0)
+            self.assertTrue(-0.1 <= base.min() < 0.1)
+            mult *= 10
 
 if __name__ == '__main__':
     numpy.random.seed(1997)
