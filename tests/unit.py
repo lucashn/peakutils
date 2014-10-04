@@ -2,6 +2,7 @@ import unittest
 import peakutils
 import os
 import numpy
+from numpy.testing import assert_array_almost_equal
 import scipy.signal
 
 def load(name):
@@ -69,7 +70,7 @@ class Baseline(unittest.TestCase):
         self.data = load('exp')
 
     def test_conditioning(self):
-        x, y = self.data[:,0], self.data[:,1]
+        _, y = self.data[:,0], self.data[:,1]
         mult = 1e-6
 
         while mult < 100001:
@@ -78,6 +79,18 @@ class Baseline(unittest.TestCase):
             self.assertTrue(0.8 < base.max() < 1.0)
             self.assertTrue(-0.1 <= base.min() < 0.1)
             mult *= 10
+
+class Prepare(unittest.TestCase):
+    '''Tests the prepare module'''
+    def setUp(self):
+        self.orig = numpy.array([-2, -1, 0.5, 1, 3])
+
+    def test_scale(self):
+        x1, range_old = peakutils.scale(self.orig, (-10, 8))
+        x2, range_new = peakutils.scale(x1, range_old)
+
+        assert_array_almost_equal(self.orig, x2)
+        self.assertTupleEqual(range_new, (-10, 8))
 
 if __name__ == '__main__':
     numpy.random.seed(1997)
