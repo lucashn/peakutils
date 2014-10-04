@@ -10,7 +10,7 @@ import numpy
 
 setup(
     name='PeakUtils',
-    version='0.1.0',
+    version='0.2.0',
     description='Peak detection utilities for 1D data',
     author='Lucas Hermann Negri',
     author_email='lucashnegri@gmail.com',
@@ -36,9 +36,16 @@ import shutil
 if "clean" in sys.argv:
     print("removing junk")
 
-    os.remove("MANIFEST")
+    try:
+        os.remove("MANIFEST")
+    except:
+        pass
+    
     dirs = ["peakutils/__pycache__", "peakutils/__pycache__", "PeakUtils.egg-info",
             "build", "dist"]
 
     for dir in dirs:
-        shutil.rmtree(dir, True)
+        try:
+            shutil.rmtree(dir, True)
+        except:
+            pass

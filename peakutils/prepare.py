@@ -1,4 +1,6 @@
-def scale(x, new_range = (0., 1.)):
+'''Data preparation / preprocessing algorithms.'''
+
+def scale(x, new_range=(0., 1.)):
     '''Changes the scale of an array
 
     Parameters

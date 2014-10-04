@@ -21,6 +21,13 @@ peakutils.peak
     :members:
     :special-members:
     
+peakutils.prepare
+-----------------
+    
+.. automodule:: peakutils.prepare
+    :members:
+    :special-members:
+    
 peakutils.plot
 --------------
     

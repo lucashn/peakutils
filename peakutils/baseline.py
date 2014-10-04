@@ -1,3 +1,5 @@
+'''Baseline estimation algorithms.'''
+
 import numpy as np
 import scipy.linalg as LA
 import math
@@ -41,7 +43,7 @@ def baseline(y, deg=3, max_it=100, tol=1e-3):
     vander = np.vander(x, order)
     vander_pinv = LA.pinv2(vander)
 
-    for it in range(max_it):
+    for _ in range(max_it):
         coeffs_new = np.dot(vander_pinv, y)
 
         if LA.norm(coeffs_new-coeffs) / LA.norm(coeffs) < tol:
