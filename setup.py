@@ -1,12 +1,7 @@
-﻿try:
-    from setuptools import setup
-except ImportError:
-    from distutils.core import setup
+﻿from setuptools import setup
 
 with open('README.rst') as readme:
     long_description = readme.read()
-
-import numpy
 
 setup(
     name='PeakUtils',
