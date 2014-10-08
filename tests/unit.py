@@ -9,37 +9,54 @@ def load(name):
     p = os.path.join(os.path.dirname(__file__), name)
     return numpy.loadtxt(p)
 
-class ExperimentalData(unittest.TestCase):
+class LPGPeaks(unittest.TestCase):
     '''Tests with experimental data'''
     def test_peaks(self):
-        cases = [(load('noise'), 8), (load('baseline'), 2)]
-        
-        for data in cases:
-            y, n_peaks = data[0][:,1], data[1]
-            filtered = scipy.signal.savgol_filter(y, 21, 1)
-            idx = peakutils.indexes(filtered, thres=0.08, min_dist=50)
+        y = load('noise')[:,1]
+        filtered = scipy.signal.savgol_filter(y, 21, 1)
+        n_peaks = 8
 
-            for p in range(idx.size, 1):
-                self.assertGreater(idx[p], 0)
-                self.assertLess(idx[p], idx.size-1)
-                self.assertGreater(idx[p], idx[p-1])
+        idx = peakutils.indexes(filtered, thres=0.08, min_dist=50)
 
-            self.assertEqual(idx.size, n_peaks)
+        for p in range(idx.size, 1):
+            self.assertGreater(idx[p], 0)
+            self.assertLess(idx[p], idx.size-1)
+            self.assertGreater(idx[p], idx[p-1])
+
+        self.assertEqual(idx.size, n_peaks)
+
+class FBGPeaks(unittest.TestCase):
+    '''Tests with experimental data'''
+    def test_peaks(self):
+        data = load('baseline')
+        x, y = data[:,0], data[:,1]
+        n_peaks = 2
+
+        prepared = y - peakutils.baseline(y, 3)
+        idx = peakutils.indexes(prepared, thres=0.03, min_dist=5)
+
+        for p in range(idx.size, 1):
+            self.assertGreater(idx[p], 0)
+            self.assertLess(idx[p], idx.size-1)
+            self.assertGreater(idx[p], idx[p-1])
+
+        self.assertEqual(idx.size, n_peaks)
+        assert_array_almost_equal(x[idx], numpy.array([1527.3, 1529.77]))
 
 class SimulatedData(unittest.TestCase):
     '''Tests with simulated data'''
-    
+    def setUp(self):
+        self.near = numpy.array([0, 1, 0, 2, 0, 3, 0, 2, 0, 1, 0])
+
     def test_peaks(self):
         '''(3 peaks + baseline + noise)'''
         x = numpy.linspace(0, 100, 1000)
         centers = (20, 40, 70)
-        y = (peakutils.gaussian(x, 1, centers[0], 3) + 
+        y = (peakutils.gaussian(x, 1, centers[0], 3) +
              peakutils.gaussian(x, 2, centers[1], 5) +
              peakutils.gaussian(x, 3, centers[2], 1) +
              numpy.random.random(x.size) * 0.2)
 
-        y_base = y + numpy.polyval([2., -3., 5.], x)
-        
         filtered = scipy.signal.savgol_filter(y, 51, 3)
         idx = peakutils.indexes(filtered, thres=0.3, min_dist=100)
         peaks = peakutils.interpolate(x, y, idx, width=30)
@@ -50,11 +67,16 @@ class SimulatedData(unittest.TestCase):
         for i in range(peaks.size):
             self.assertAlmostEqual(peaks[i], centers[i], delta=0.5)
 
-    def test_near_peaks(self):
-        y = numpy.array([0, 1, 0, 2, 0, 3, 0, 2, 0, 1, 0])
-        out = peakutils.indexes(y, thres=0, min_dist=2)
-        expected = numpy.array([3, 5, 9])
+    def test_near_peaks1(self):
+        out = peakutils.indexes(self.near, thres=0, min_dist=2)
+        expected = numpy.array([1, 5, 9])
         assert_array_almost_equal(out, expected)
+
+    def test_near_peaks2(self):
+        out = peakutils.indexes(self.near, thres=0, min_dist=1)
+        expected = numpy.array([1, 3, 5, 7, 9])
+        assert_array_almost_equal(out, expected)
+
 
 class Baseline(unittest.TestCase):
     '''Tests the conditioning of the lsqreg in the implementation'''
@@ -79,12 +101,12 @@ class Prepare(unittest.TestCase):
 
         assert_array_almost_equal(orig, x2)
         self.assertTupleEqual(range_new, (-10, 8))
-        
+
     def test_scale_degenerate(self):
         orig = numpy.array([-3,-3,-3])
         x1, range_old = peakutils.scale(orig, (5, 7))
         x2, range_new = peakutils.scale(x1, range_old)
-        
+
         assert_array_almost_equal(x1, [6,6,6])
         assert_array_almost_equal(x2, orig)
 

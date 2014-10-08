@@ -35,19 +35,17 @@ def indexes(y, thres=0.3, min_dist=1):
                      & (y > thres))[0]
 
     if peaks.size > 1 and min_dist > 1:
-        new_peaks = []
-        top = peaks[0]
-        padding = y.size+min_dist+1
+        highest = peaks[np.argsort(y[peaks])][::-1]
+        rem = np.ones(y.size, dtype=bool)
+        rem[peaks] = False
 
-        for p in np.append(peaks, padding):
-            if (p - top) <= min_dist: # still in the same group?
-                if y[p] > y[top]:
-                    top = p
-            else: # end, start another 'group'
-                new_peaks.append(top)
-                top = p
+        for peak in highest:
+            if not rem[peak]:
+                sl = slice(max(0, peak-min_dist), peak+min_dist+1)
+                rem[sl] = True
+                rem[peak] = False
 
-        peaks = np.array(new_peaks)
+        peaks = np.arange(y.size)[~rem]
 
     return peaks
 
