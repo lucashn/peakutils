@@ -1,17 +1,48 @@
-﻿from setuptools import setup
+﻿from setuptools import setup, Command
+
+class my_clean(Command):
+    
+    description = "Removes the generated files from the directory"
+    user_options = []
+    
+    def initialize_options(self):
+        pass
+    
+    def run(self):
+        import sys, os, glob, shutil
+
+        try:
+            os.remove("MANIFEST")
+        except:
+            pass
+    
+        dirs = ["peakutils/__pycache__", "peakutils/__pycache__",
+                "PeakUtils.egg-info", "build", "dist"]
+
+        for dir in dirs:
+            try:
+                shutil.rmtree(dir, True)
+            except:
+                pass
+    
+    def finalize_options(self):
+        pass
 
 with open('README.rst') as readme:
     long_description = readme.read()
 
 setup(
     name='PeakUtils',
-    version='0.2.0',
+    version='0.3.0',
     description='Peak detection utilities for 1D data',
     author='Lucas Hermann Negri',
     author_email='lucashnegri@gmail.com',
     url='https://bitbucket.org/lucashnegri/peakutils',
     packages=['peakutils'],
     install_requires=['numpy', 'scipy'],
+    cmdclass={
+        'clean': my_clean,
+    },
     classifiers=[
         'Development Status :: 4 - Beta',
         'License :: OSI Approved :: MIT License',
@@ -20,27 +51,4 @@ setup(
         'Topic :: Scientific/Engineering'
     ],
     license="MIT"
- )
-
-# ahh, so clean
-import sys
-import os
-import glob
-import shutil
-
-if "clean" in sys.argv:
-    print("removing junk")
-
-    try:
-        os.remove("MANIFEST")
-    except:
-        pass
-    
-    dirs = ["peakutils/__pycache__", "peakutils/__pycache__", "PeakUtils.egg-info",
-            "build", "dist"]
-
-    for dir in dirs:
-        try:
-            shutil.rmtree(dir, True)
-        except:
-            pass
+)
