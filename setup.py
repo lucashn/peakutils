@@ -12,7 +12,7 @@ class my_clean(Command):
         import sys, os, glob, shutil
 
         try:
-            os.remove("MANIFEST")
+            os.remove('MANIFEST')
         except:
             pass
     
@@ -20,10 +20,7 @@ class my_clean(Command):
                 "PeakUtils.egg-info", "build", "dist"]
 
         for dir in dirs:
-            try:
-                shutil.rmtree(dir, True)
-            except:
-                pass
+            shutil.rmtree(dir, True)
     
     def finalize_options(self):
         pass
