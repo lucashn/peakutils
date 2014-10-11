@@ -47,5 +47,6 @@ setup(
         'Programming Language :: Python :: 3',
         'Topic :: Scientific/Engineering'
     ],
-    license="MIT"
+    license="MIT",
+    test_suite="tests",
 )
