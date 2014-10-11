@@ -13,7 +13,7 @@ before_script:
 - pip install .
 
 script:
-- nosetests --with-xunit --xunit-file=shippable/testresults/nosetests.xml -w tests
+- python setup.py nosetests --with-xunit --xunit-file=shippable/testresults/nosetests.xml
 
 notifications:
 email:
