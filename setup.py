@@ -1,27 +1,26 @@
 ﻿from setuptools import setup, Command
 
 class my_clean(Command):
-    
+
     description = "Removes the generated files from the directory"
     user_options = []
-    
+
     def initialize_options(self):
         pass
-    
+
     def run(self):
-        import sys, os, glob, shutil
+        import os, shutil
 
         try:
             os.remove('MANIFEST')
         except:
             pass
-    
-        dirs = ["peakutils/__pycache__", "peakutils/__pycache__",
-                "PeakUtils.egg-info", "build", "dist"]
+
+        dirs = ['peakutils/__pycache__', 'PeakUtils.egg-info', 'build', 'dist']
 
         for dir in dirs:
             shutil.rmtree(dir, True)
-    
+
     def finalize_options(self):
         pass
 
@@ -47,6 +46,7 @@ setup(
         'Programming Language :: Python :: 3',
         'Topic :: Scientific/Engineering'
     ],
-    license="MIT",
-    test_suite="tests",
+    license='MIT',
+    test_suite='tests',
+    keywords='peak detection seatch gaussian centroid baseline maximum',
 )
