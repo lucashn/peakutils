@@ -4,6 +4,7 @@ import numpy as np
 import scipy.linalg as LA
 import math
 
+
 def baseline(y, deg=3, max_it=100, tol=1e-3):
     '''Computes the baseline of a given data.
 
@@ -30,7 +31,7 @@ def baseline(y, deg=3, max_it=100, tol=1e-3):
     Returns
     -------
     ndarray
-        Array with the amplitude of the baseline for every original point in *y*
+        Array with the baseline amplitude for every original point in *y*
     '''
     order = deg+1
     coeffs = np.ones(order)

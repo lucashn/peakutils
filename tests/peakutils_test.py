@@ -5,14 +5,16 @@ import numpy
 from numpy.testing import assert_array_almost_equal
 import scipy.signal
 
+
 def load(name):
     p = os.path.join(os.path.dirname(__file__), name)
     return numpy.loadtxt(p)
 
+
 class LPGPeaks(unittest.TestCase):
     '''Tests with experimental data'''
     def test_peaks(self):
-        y = load('noise')[:,1]
+        y = load('noise')[:, 1]
         filtered = scipy.signal.savgol_filter(y, 21, 1)
         n_peaks = 8
 
@@ -25,11 +27,12 @@ class LPGPeaks(unittest.TestCase):
 
         self.assertEqual(idx.size, n_peaks)
 
+
 class FBGPeaks(unittest.TestCase):
     '''Tests with experimental data'''
     def test_peaks(self):
         data = load('baseline')
-        x, y = data[:,0], data[:,1]
+        x, y = data[:, 0], data[:, 1]
         n_peaks = 2
 
         prepared = y - peakutils.baseline(y, 3)
@@ -42,6 +45,7 @@ class FBGPeaks(unittest.TestCase):
 
         self.assertEqual(idx.size, n_peaks)
         assert_array_almost_equal(x[idx], numpy.array([1527.3, 1529.77]))
+
 
 class SimulatedData(unittest.TestCase):
     '''Tests with simulated data'''
@@ -82,7 +86,7 @@ class Baseline(unittest.TestCase):
     '''Tests the conditioning of the lsqreg in the implementation'''
     def test_conditioning(self):
         data = data = load('exp')
-        _, y = data[:,0], data[:,1]
+        y = data[:, 1]
         mult = 1e-6
 
         while mult < 100001:
@@ -91,6 +95,7 @@ class Baseline(unittest.TestCase):
             self.assertTrue(0.8 < base.max() < 1.0)
             self.assertTrue(-0.1 <= base.min() < 0.1)
             mult *= 10
+
 
 class Prepare(unittest.TestCase):
     '''Tests the prepare module'''
@@ -103,11 +108,11 @@ class Prepare(unittest.TestCase):
         self.assertTupleEqual(range_new, (-10, 8))
 
     def test_scale_degenerate(self):
-        orig = numpy.array([-3,-3,-3])
+        orig = numpy.array([-3, -3, -3])
         x1, range_old = peakutils.scale(orig, (5, 7))
         x2, range_new = peakutils.scale(x1, range_old)
 
-        assert_array_almost_equal(x1, [6,6,6])
+        assert_array_almost_equal(x1, [6, 6, 6])
         assert_array_almost_equal(x2, orig)
 
 if __name__ == '__main__':

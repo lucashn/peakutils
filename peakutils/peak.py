@@ -3,6 +3,7 @@
 import numpy as np
 from scipy import optimize
 
+
 def indexes(y, thres=0.3, min_dist=1):
     '''Peak detection routine.
 
@@ -49,6 +50,7 @@ def indexes(y, thres=0.3, min_dist=1):
 
     return peaks
 
+
 def centroid(x, y):
     '''Computes the centroid for the specified data.
 
@@ -65,6 +67,7 @@ def centroid(x, y):
         Centroid of the data.
     '''
     return np.sum(x*y)/np.sum(y)
+
 
 def gaussian(x, ampl, center, dev):
     '''Computes the Gaussian function.
@@ -87,6 +90,7 @@ def gaussian(x, ampl, center, dev):
     '''
     return ampl * np.exp(-(x-center)**2 / (2*dev**2))
 
+
 def gaussian_fit(x, y):
     '''Performs a Gaussian fitting of the specified data.
 
@@ -105,6 +109,7 @@ def gaussian_fit(x, y):
     initial = [np.max(y), x[0], (x[1]-x[0])*5]
     params, *_ = optimize.curve_fit(gaussian, x, y, initial)
     return params[1]
+
 
 def interpolate(x, y, ind=None, width=10, func=gaussian_fit):
     '''Tries to enhance the resolution of the peak detection by using

@@ -7,9 +7,9 @@ PeakUtils
     :alt: Latest Version
 
 As the name implies, this package provides utilities related to the detection
-of peaks for 1D data, such as estimating the baseline, finding the indexes of
-the peaks in the data and performing Gaussian fitting or centroid computation
-to further increase the resolution of the peak detection.
+of peaks on 1D data. Includes functions to perform baseline estimation,
+to find the indexes of the peaks in the data and performing Gaussian fitting or
+centroid computation to further increase the resolution of the peak detection.
 
 The documentation is available at http://pythonhosted.org/PeakUtils .
 

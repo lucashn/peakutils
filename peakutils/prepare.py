@@ -2,6 +2,7 @@
 
 import numpy as np
 
+
 def scale(x, new_range=(0., 1.), eps=1e-9):
     '''Changes the scale of an array
 
@@ -24,7 +25,7 @@ def scale(x, new_range=(0., 1.), eps=1e-9):
     '''
     assert new_range[1] >= new_range[0]
     range_ = (x.min(), x.max())
-    
+
     if (range_[1] - range_[0]) < eps:
         mean = (new_range[0] + new_range[1]) / 2.0
         xp = np.full(x.shape, mean)
@@ -32,5 +33,5 @@ def scale(x, new_range=(0., 1.), eps=1e-9):
         xp = (x - range_[0])
         xp *= (new_range[1] - new_range[0]) / (range_[1] - range_[0])
         xp += new_range[0]
-    
+
     return xp, range_
