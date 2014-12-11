@@ -11,7 +11,7 @@ Importing the libraries
 
     import numpy
     import peakutils
-    import peakutils.plot
+    from peakutils.plot import plot as pplot
     from matplotlib import pyplot
     %matplotlib inline
     
@@ -44,16 +44,15 @@ data. Due to noise, it will be just a rough approximation.
 
     indexes = peakutils.indexes(y, thres=0.5, min_dist=30)
     print(indexes)
-    print(x[indexes])
+    print(x[indexes], y[indexes])
     pyplot.figure(figsize=(10,6))
-    peakutils.plot(x, y, indexes)
+    pplot(x, y, indexes)
     pyplot.title('First estimate')
 
 .. parsed-literal::
 
-    [30 73]
-    [ 30.  73.]
-
+    [31 74]
+    [ 31.  74.] [ 5.67608909  7.79403394]
 
 .. image:: _static/tut_a_2.png
 
@@ -71,7 +70,7 @@ a Gaussian near each peak that we have just detected.
 
 .. parsed-literal::
 
-    [ 30.54688423  72.36467323]
+    [ 30.58270223  72.34348214]
 
 
 Estimating and removing the baseline
