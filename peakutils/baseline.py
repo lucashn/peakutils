@@ -1,4 +1,4 @@
-'''Baseline estimation algorithms.'''
+"""Baseline estimation algorithms."""
 
 import numpy as np
 import scipy.linalg as LA
@@ -6,11 +6,11 @@ import math
 
 
 def baseline(y, deg=3, max_it=100, tol=1e-3):
-    '''Computes the baseline of a given data.
+    """Computes the baseline of a given data.
 
     Iteratively performs a polynomial fitting in the data to detect its
     baseline. At every iteration, the fitting weights on the regions with
-    peaks is reduced to identify the baseline only.
+    peaks are reduced to identify the baseline only.
 
     Parameters
     ----------
@@ -32,12 +32,12 @@ def baseline(y, deg=3, max_it=100, tol=1e-3):
     -------
     ndarray
         Array with the baseline amplitude for every original point in *y*
-    '''
-    order = deg+1
+    """
+    order = deg + 1
     coeffs = np.ones(order)
 
     # try to avoid numerical issues
-    cond = math.pow(y.max(), 1./order)
+    cond = math.pow(y.max(), 1. / order)
     x = np.linspace(0., cond, y.size)
     base = y.copy()
 
@@ -47,7 +47,7 @@ def baseline(y, deg=3, max_it=100, tol=1e-3):
     for _ in range(max_it):
         coeffs_new = np.dot(vander_pinv, y)
 
-        if LA.norm(coeffs_new-coeffs) / LA.norm(coeffs) < tol:
+        if LA.norm(coeffs_new - coeffs) / LA.norm(coeffs) < tol:
             break
 
         coeffs = coeffs_new

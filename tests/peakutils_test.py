@@ -4,6 +4,7 @@ import os
 import numpy
 from numpy.testing import assert_array_almost_equal
 import scipy.signal
+import numpy as np
 
 
 def load(name):
@@ -12,7 +13,9 @@ def load(name):
 
 
 class LPGPeaks(unittest.TestCase):
+
     '''Tests with experimental data'''
+
     def test_peaks(self):
         y = load('noise')[:, 1]
         filtered = scipy.signal.savgol_filter(y, 21, 1)
@@ -22,14 +25,16 @@ class LPGPeaks(unittest.TestCase):
 
         for p in range(idx.size, 1):
             self.assertGreater(idx[p], 0)
-            self.assertLess(idx[p], idx.size-1)
-            self.assertGreater(idx[p], idx[p-1])
+            self.assertLess(idx[p], idx.size - 1)
+            self.assertGreater(idx[p], idx[p - 1])
 
         self.assertEqual(idx.size, n_peaks)
 
 
 class FBGPeaks(unittest.TestCase):
+
     '''Tests with experimental data'''
+
     def test_peaks(self):
         data = load('baseline')
         x, y = data[:, 0], data[:, 1]
@@ -40,15 +45,17 @@ class FBGPeaks(unittest.TestCase):
 
         for p in range(idx.size, 1):
             self.assertGreater(idx[p], 0)
-            self.assertLess(idx[p], idx.size-1)
-            self.assertGreater(idx[p], idx[p-1])
+            self.assertLess(idx[p], idx.size - 1)
+            self.assertGreater(idx[p], idx[p - 1])
 
         self.assertEqual(idx.size, n_peaks)
         assert_array_almost_equal(x[idx], numpy.array([1527.3, 1529.77]))
 
 
 class SimulatedData(unittest.TestCase):
+
     '''Tests with simulated data'''
+
     def setUp(self):
         self.near = numpy.array([0, 1, 0, 2, 0, 3, 0, 2, 0, 1, 0])
 
@@ -83,7 +90,9 @@ class SimulatedData(unittest.TestCase):
 
 
 class Baseline(unittest.TestCase):
+
     '''Tests the conditioning of the lsqreg in the implementation'''
+
     def test_conditioning(self):
         data = data = load('exp')
         y = data[:, 1]
@@ -98,7 +107,9 @@ class Baseline(unittest.TestCase):
 
 
 class Prepare(unittest.TestCase):
+
     '''Tests the prepare module'''
+
     def test_scale(self):
         orig = numpy.array([-2, -1, 0.5, 1, 3])
         x1, range_old = peakutils.scale(orig, (-10, 8))
@@ -114,6 +125,21 @@ class Prepare(unittest.TestCase):
 
         assert_array_almost_equal(x1, [6, 6, 6])
         assert_array_almost_equal(x2, orig)
+
+class Centroid(unittest.TestCase):
+
+    '''Tests the centroid implementations.'''
+
+    def test_centroid(self):
+        y = np.ones(10)
+        x = np.arange(10)
+        self.assertEqual(peakutils.centroid(x, y), 4.5)
+
+    def test_centroid2(self):
+        y = np.ones(3)
+        x = np.array([0., 1., 9.])
+        c, v = peakutils.centroid2(y, x)
+        self.assertEqual(c, 4.5)
 
 if __name__ == '__main__':
     numpy.random.seed(1997)

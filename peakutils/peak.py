@@ -2,7 +2,7 @@
 
 import numpy as np
 from scipy import optimize
-
+from scipy.integrate import simps
 
 def indexes(y, thres=0.3, min_dist=1):
     '''Peak detection routine.
@@ -42,7 +42,7 @@ def indexes(y, thres=0.3, min_dist=1):
 
         for peak in highest:
             if not rem[peak]:
-                sl = slice(max(0, peak-min_dist), peak+min_dist+1)
+                sl = slice(max(0, peak - min_dist), peak + min_dist + 1)
                 rem[sl] = True
                 rem[peak] = False
 
@@ -53,6 +53,7 @@ def indexes(y, thres=0.3, min_dist=1):
 
 def centroid(x, y):
     '''Computes the centroid for the specified data.
+    Refer to centroid2 for a more complete, albeit slower version.
 
     Parameters
     ----------
@@ -66,8 +67,32 @@ def centroid(x, y):
     float
         Centroid of the data.
     '''
-    return np.sum(x*y)/np.sum(y)
+    return np.sum(x * y) / np.sum(y)
 
+def centroid2(y, x=None, dx=1.):
+    '''Computes the centroid for the specified data.
+    Not intended to be used
+
+    Parameters
+    ----------
+    y : array_like
+        Array whose centroid is to be calculated.
+    x : array_like, optional
+        The points at which y is sampled.
+    Returns
+    -------
+    (centroid, sd)
+        Centroid and standard deviation of the data.
+    '''
+    yt = np.array(y)
+
+    if x is None:
+        x = np.arange(yt.size, dtype='float') * dx
+
+    normaliser = simps(yt, x)
+    centroid = simps(x * yt, x) / normaliser
+    var = simps((x - centroid) ** 2 * yt, x) / normaliser
+    return centroid, np.sqrt(var)
 
 def gaussian(x, ampl, center, dev):
     '''Computes the Gaussian function.
@@ -88,7 +113,7 @@ def gaussian(x, ampl, center, dev):
     float
         Value of the specified Gaussian at *x*
     '''
-    return ampl * np.exp(-(x-center)**2 / (2*dev**2))
+    return ampl * np.exp(-(x - center) ** 2 / (2 * dev ** 2))
 
 
 def gaussian_fit(x, y):
@@ -106,7 +131,7 @@ def gaussian_fit(x, y):
     ndarray
         Parameters of the Gaussian that fits the specified data
     '''
-    initial = [np.max(y), x[0], (x[1]-x[0])*5]
+    initial = [np.max(y), x[0], (x[1] - x[0]) * 5]
     params, *_ = optimize.curve_fit(gaussian, x, y, initial)
     return params[1]
 
@@ -141,11 +166,11 @@ def interpolate(x, y, ind=None, width=10, func=gaussian_fit):
         ind = indexes(y)
 
     out = []
-    for slice_ in (slice(i-width, i+width) for i in ind):
+    for slice_ in (slice(i - width, i + width) for i in ind):
         try:
             fit = func(x[slice_], y[slice_])
             out.append(fit)
-        except:
+        except Exception:
             pass
 
     return np.array(out)
