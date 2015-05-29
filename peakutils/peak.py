@@ -132,7 +132,7 @@ def gaussian_fit(x, y):
         Parameters of the Gaussian that fits the specified data
     '''
     initial = [np.max(y), x[0], (x[1] - x[0]) * 5]
-    params, *_ = optimize.curve_fit(gaussian, x, y, initial)
+    params, pcov = optimize.curve_fit(gaussian, x, y, initial)
     return params[1]
 
 
