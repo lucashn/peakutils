@@ -11,11 +11,11 @@ def indexes(y, thres=0.3, min_dist=1):
 
     Finds the peaks in *y* by taking its first order difference. By using
     *thres* and *min_dist* parameters, it is possible to reduce the number of
-    detected peaks.
+    detected peaks. *y* must be signed.
 
     Parameters
     ----------
-    y : ndarray
+    y : ndarray (signed)
         1D amplitude data to search for peaks.
     thres : float between [0., 1.]
         Normalized threshold. Only the peaks with amplitude higher than the
