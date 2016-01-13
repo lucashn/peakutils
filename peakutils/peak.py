@@ -4,6 +4,8 @@ import numpy as np
 from scipy import optimize
 from scipy.integrate import simps
 
+eps = np.finfo(float).eps
+
 def indexes(y, thres=0.3, min_dist=1):
     '''Peak detection routine.
 
@@ -27,6 +29,9 @@ def indexes(y, thres=0.3, min_dist=1):
     ndarray
         Array containing the indexes of the peaks that were detected
     '''
+    if np.issubdtype(y.dtype, np.unsignedinteger):
+        raise ValueError("y must be signed")
+
     thres *= np.max(y) - np.min(y)
 
     # find the peaks by using the first order difference
@@ -99,13 +104,13 @@ def gaussian(x, ampl, center, dev):
 
     Parameters
     ----------
-    x : float
+    x : number
         Point to evaluate the Gaussian for.
-    a : float
+    a : number
         Amplitude.
-    b : float
+    b : number
         Center.
-    c : float
+    c : number
         Width.
 
     Returns
@@ -113,8 +118,7 @@ def gaussian(x, ampl, center, dev):
     float
         Value of the specified Gaussian at *x*
     '''
-    return ampl * np.exp(-(x - center) ** 2 / (2 * dev ** 2))
-
+    return ampl * np.exp(-(x - float(center)) ** 2 / (2.0 * dev ** 2 + eps))
 
 def gaussian_fit(x, y):
     '''Performs a Gaussian fitting of the specified data.
@@ -161,16 +165,12 @@ def interpolate(x, y, ind=None, width=10, func=gaussian_fit):
     ndarray :
         Array with the adjusted peak positions (in *x*)
     '''
-
     if ind is None:
         ind = indexes(y)
 
     out = []
     for slice_ in (slice(i - width, i + width) for i in ind):
-        try:
-            fit = func(x[slice_], y[slice_])
-            out.append(fit)
-        except Exception:
-            pass
+        fit = func(x[slice_], y[slice_])
+        out.append(fit)
 
     return np.array(out)

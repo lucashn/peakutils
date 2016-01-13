@@ -59,16 +59,16 @@ class SimulatedData(unittest.TestCase):
     def setUp(self):
         self.near = numpy.array([0, 1, 0, 2, 0, 3, 0, 2, 0, 1, 0])
 
-    def test_peaks(self):
+    def aux_test_peaks(self, dtype):
         '''(3 peaks + baseline + noise)'''
         x = numpy.linspace(0, 100, 1000)
         centers = (20, 40, 70)
-        y = (peakutils.gaussian(x, 1, centers[0], 3) +
+        y = (1000 * (peakutils.gaussian(x, 1, centers[0], 3) +
              peakutils.gaussian(x, 2, centers[1], 5) +
              peakutils.gaussian(x, 3, centers[2], 1) +
-             numpy.random.random(x.size) * 0.2)
+             numpy.random.random(x.size) * 0.2)).astype(dtype)
 
-        filtered = scipy.signal.savgol_filter(y, 51, 3)
+        filtered = scipy.signal.savgol_filter(y, 51, 3).astype(dtype)
         idx = peakutils.indexes(filtered, thres=0.3, min_dist=100)
         peaks = peakutils.interpolate(x, y, idx, width=30)
         self.assertEqual(idx.size, len(centers))
@@ -77,6 +77,12 @@ class SimulatedData(unittest.TestCase):
         # interpolation should work!
         for i in range(peaks.size):
             self.assertAlmostEqual(peaks[i], centers[i], delta=0.5)
+
+    def test_peaks(self):
+        self.aux_test_peaks('float64')
+        self.aux_test_peaks('float32')
+        self.aux_test_peaks('int32')
+        self.assertRaises(ValueError, self.aux_test_peaks, 'uint32')
 
     def test_near_peaks1(self):
         out = peakutils.indexes(self.near, thres=0, min_dist=2)
