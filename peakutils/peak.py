@@ -29,7 +29,7 @@ def indexes(y, thres=0.3, min_dist=1):
     ndarray
         Array containing the indexes of the peaks that were detected
     '''
-    if np.issubdtype(y.dtype, np.unsignedinteger):
+    if isinstance(y, np.ndarray) and np.issubdtype(y.dtype, np.unsignedinteger):
         raise ValueError("y must be signed")
 
     thres *= np.max(y) - np.min(y)

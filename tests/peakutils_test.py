@@ -14,7 +14,7 @@ def load(name):
 
 class LPGPeaks(unittest.TestCase):
 
-    '''Tests with experimental data'''
+    '''Tests with experimental data from long period gratings'''
 
     def test_peaks(self):
         y = load('noise')[:, 1]
@@ -33,7 +33,7 @@ class LPGPeaks(unittest.TestCase):
 
 class FBGPeaks(unittest.TestCase):
 
-    '''Tests with experimental data'''
+    '''Tests with experimental data from fiber Bragg gratings'''
 
     def test_peaks(self):
         data = load('baseline')
@@ -92,6 +92,11 @@ class SimulatedData(unittest.TestCase):
     def test_near_peaks2(self):
         out = peakutils.indexes(self.near, thres=0, min_dist=1)
         expected = numpy.array([1, 3, 5, 7, 9])
+        assert_array_almost_equal(out, expected)
+
+    def test_list_peaks(self):
+        out = peakutils.indexes([1, 2, 1, 3, 5, 7, 4, 1], thres=0, min_dist=1)
+        expected = numpy.array([1, 5])
         assert_array_almost_equal(out, expected)
 
 
