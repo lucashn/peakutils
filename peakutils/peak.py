@@ -33,6 +33,7 @@ def indexes(y, thres=0.3, min_dist=1):
         raise ValueError("y must be signed")
 
     thres = thres * (np.max(y) - np.min(y)) + np.min(y)
+    min_dist = int(min_dist)
 
     # find the peaks by using the first order difference
     dy = np.diff(y)
