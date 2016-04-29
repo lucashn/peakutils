@@ -32,7 +32,7 @@ def indexes(y, thres=0.3, min_dist=1):
     if isinstance(y, np.ndarray) and np.issubdtype(y.dtype, np.unsignedinteger):
         raise ValueError("y must be signed")
 
-    thres *= np.max(y) - np.min(y)
+    thres = thres * (np.max(y) - np.min(y)) + np.min(y)
 
     # find the peaks by using the first order difference
     dy = np.diff(y)
