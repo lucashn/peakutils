@@ -152,6 +152,19 @@ class Centroid(unittest.TestCase):
         c, v = peakutils.centroid2(y, x)
         self.assertEqual(c, 4.5)
 
+class GaussianFit(unittest.TestCase):
+
+    ''' Tests the Gaussian fit implementation '''
+
+    def test_gaussian_fit(self):
+        params = np.array([0.5, 6, 2])
+        x = np.arange(10)
+        y = peakutils.gaussian(x, *params)
+        self.assertAlmostEqual(peakutils.gaussian_fit(x, y), params[1])
+
+        res = peakutils.gaussian_fit(x, y, center_only=False)
+        np.testing.assert_allclose(res, params)
+
 if __name__ == '__main__':
     numpy.random.seed(1997)
     unittest.main()

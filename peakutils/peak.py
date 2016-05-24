@@ -121,7 +121,7 @@ def gaussian(x, ampl, center, dev):
     '''
     return ampl * np.exp(-(x - float(center)) ** 2 / (2.0 * dev ** 2 + eps))
 
-def gaussian_fit(x, y):
+def gaussian_fit(x, y, center_only=True):
     '''Performs a Gaussian fitting of the specified data.
 
     Parameters
@@ -130,15 +130,22 @@ def gaussian_fit(x, y):
         Data on the x axis.
     y : ndarray
         Data on the y axis.
+    center_only: bool
+        If True, returns only the center of the Gaussian for `interpolate` compatibility
 
     Returns
     -------
-    ndarray
-        Parameters of the Gaussian that fits the specified data
+    ndarray or float
+        If center_only is `False`, returns the parameters of the Gaussian that fits the specified data
+        If center_only is `True`, returns the center position of the Gaussian
     '''
     initial = [np.max(y), x[0], (x[1] - x[0]) * 5]
     params, pcov = optimize.curve_fit(gaussian, x, y, initial)
-    return params[1]
+
+    if center_only:
+        return params[1]
+    else:
+        return params
 
 
 def interpolate(x, y, ind=None, width=10, func=gaussian_fit):
