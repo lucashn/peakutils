@@ -31,7 +31,7 @@ with open('README.rst') as readme:
 
 setup(
     name='PeakUtils',
-    version='1.0.2',
+    version='1.0.3',
     description='Peak detection utilities for 1D data',
     author='Lucas Hermann Negri',
     author_email='lucashnegri@gmail.com',

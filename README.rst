@@ -1,15 +1,14 @@
 PeakUtils
 =========
 
-.. image:: https://api.shippable.com/projects/542e077380088cee586d33c4/badge?branchName=master
 .. image:: https://pypip.in/version/PeakUtils/badge.png?style=flat
     :target: https://pypi.python.org/pypi/PeakUtils
     :alt: Latest Version
 
-As the name implies, this package provides utilities related to the detection
-of peaks on 1D data. Includes functions to perform baseline estimation,
-to find the indexes of the peaks in the data and performing Gaussian fitting or
-centroid computation to further increase the resolution of the peak detection.
+This package provides utilities related to the detection of peaks on 1D data.
+Includes functions to estimate baselines, finding the indexes of peaks in the data
+and performing Gaussian fitting or centroid computation to further increase the
+resolution of the peak detection.
 
 The documentation is available at http://pythonhosted.org/PeakUtils .
 
@@ -22,8 +21,8 @@ To install PeakUtils from the source package, run:
 
     python setup.py install
 
-PeakUtils targets Python 3 and depends on numpy, scipy, and optionally on
-matplotlib. Should work on Python 2.7 too.
+PeakUtils targets Python 2.7+ and depends on numpy, scipy, and optionally on
+matplotlib.
 
 Contribute
 ----------
