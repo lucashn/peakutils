@@ -42,8 +42,8 @@ def indexes(y, thres=0.3, min_dist=1):
     zeros,=np.where(dy == 0)
     while (len(zeros)):
         # add pixels 2 by 2 to propagate left and right value onto the zero-value pixel
-        zerosr = np.add(dy,np.hstack([dy[1:], 0.]))
-        zerosl = np.add(dy,np.hstack([0., dy[:-1]]))
+        zerosr = np.hstack([dy[1:], 0.])
+        zerosl = np.hstack([0., dy[:-1]])
 
         # replace 0 with right value if non zero
         dy[zeros]=zerosr[zeros]
