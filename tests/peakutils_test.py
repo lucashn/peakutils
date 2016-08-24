@@ -14,7 +14,7 @@ def load(name):
 
 class LPGPeaks(unittest.TestCase):
 
-    '''Tests with experimental data from long period gratings'''
+    """Tests with experimental data from long period gratings"""
 
     def test_peaks(self):
         y = load('noise')[:, 1]
@@ -33,7 +33,7 @@ class LPGPeaks(unittest.TestCase):
 
 class FBGPeaks(unittest.TestCase):
 
-    '''Tests with experimental data from fiber Bragg gratings'''
+    """Tests with experimental data from fiber Bragg gratings"""
 
     def test_peaks(self):
         data = load('baseline')
@@ -54,13 +54,13 @@ class FBGPeaks(unittest.TestCase):
 
 class SimulatedData(unittest.TestCase):
 
-    '''Tests with simulated data'''
+    """Tests with simulated data"""
 
     def setUp(self):
         self.near = numpy.array([0, 1, 0, 2, 0, 3, 0, 2, 0, 1, 0])
 
     def aux_test_peaks(self, dtype):
-        '''(3 peaks + baseline + noise)'''
+        """(3 peaks + baseline + noise)"""
         x = numpy.linspace(0, 100, 1000)
         centers = (20, 40, 70)
         y = (1000 * (peakutils.gaussian(x, 1, centers[0], 3) +
@@ -102,7 +102,7 @@ class SimulatedData(unittest.TestCase):
 
 class Baseline(unittest.TestCase):
 
-    '''Tests the conditioning of the lsqreg in the implementation'''
+    """Tests the conditioning of the lsqreg in the implementation"""
 
     def test_conditioning(self):
         data = data = load('exp')
@@ -119,7 +119,7 @@ class Baseline(unittest.TestCase):
 
 class Prepare(unittest.TestCase):
 
-    '''Tests the prepare module'''
+    """Tests the prepare module"""
 
     def test_scale(self):
         orig = numpy.array([-2, -1, 0.5, 1, 3])
@@ -139,7 +139,7 @@ class Prepare(unittest.TestCase):
 
 class Centroid(unittest.TestCase):
 
-    '''Tests the centroid implementations.'''
+    """Tests the centroid implementations."""
 
     def test_centroid(self):
         y = np.ones(10)
@@ -154,7 +154,7 @@ class Centroid(unittest.TestCase):
 
 class GaussianFit(unittest.TestCase):
 
-    ''' Tests the Gaussian fit implementation '''
+    """ Tests the Gaussian fit implementation """
 
     def test_gaussian_fit(self):
         params = np.array([0.5, 6, 2])
@@ -164,6 +164,28 @@ class GaussianFit(unittest.TestCase):
 
         res = peakutils.gaussian_fit(x, y, center_only=False)
         np.testing.assert_allclose(res, params)
+
+class Plateau(unittest.TestCase):
+
+    """Issue #4"""
+
+    def test_plateau1(self):
+        y = np.zeros(20)
+        y[1:6] = 1.0
+        y[8:9] = 2.0
+        y[11:19] = 3.0
+        idx = peakutils.indexes(y)
+        np.testing.assert_array_equal(idx, [3, 8, 14])
+
+    def test_plateau2(self):
+        y = np.zeros(20)
+        y[0:6] = 1.0
+        y[8:9] = 2.0
+        y[11:20] = 3.0
+        idx = peakutils.indexes(y)
+        np.testing.assert_array_equal(idx, [8])
+        # note: there are no peaks in the first and last series as the data
+        # to the left of 0 and right of 19 is unknown
 
 if __name__ == '__main__':
     numpy.random.seed(1997)

@@ -6,7 +6,8 @@ import math
 
 
 def baseline(y, deg=3, max_it=100, tol=1e-3):
-    """Computes the baseline of a given data.
+    """
+    Computes the baseline of a given data.
 
     Iteratively performs a polynomial fitting in the data to detect its
     baseline. At every iteration, the fitting weights on the regions with

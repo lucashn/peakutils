@@ -1,10 +1,10 @@
-'''Data preparation / preprocessing algorithms.'''
+"""Data preparation / preprocessing algorithms."""
 
 import numpy as np
 
 
 def scale(x, new_range=(0., 1.), eps=1e-9):
-    '''Changes the scale of an array
+    """Changes the scale of an array
 
     Parameters
     ----------
@@ -22,7 +22,7 @@ def scale(x, new_range=(0., 1.), eps=1e-9):
         Scaled array
     tuple (float, float)
         Previous data range, allowing a rescale to the old range
-    '''
+    """
     assert new_range[1] >= new_range[0]
     range_ = (x.min(), x.max())
 

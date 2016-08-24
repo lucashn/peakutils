@@ -1,4 +1,4 @@
-'''Peak detection algorithms.'''
+"""Peak detection algorithms."""
 
 import numpy as np
 from scipy import optimize
@@ -7,7 +7,7 @@ from scipy.integrate import simps
 eps = np.finfo(float).eps
 
 def indexes(y, thres=0.3, min_dist=1):
-    '''Peak detection routine.
+    """Peak detection routine.
 
     Finds the peaks in *y* by taking its first order difference. By using
     *thres* and *min_dist* parameters, it is possible to reduce the number of
@@ -28,7 +28,7 @@ def indexes(y, thres=0.3, min_dist=1):
     -------
     ndarray
         Array containing the indexes of the peaks that were detected
-    '''
+    """
     if isinstance(y, np.ndarray) and np.issubdtype(y.dtype, np.unsignedinteger):
         raise ValueError("y must be signed")
 
@@ -37,10 +37,10 @@ def indexes(y, thres=0.3, min_dist=1):
 
     # compute first order difference
     dy = np.diff(y)
-  
+
     # propagate left and right values successively to fill all plateau pixels (0-value)
     zeros,=np.where(dy == 0)
-    while (len(zeros)):
+    while len(zeros):
         # add pixels 2 by 2 to propagate left and right value onto the zero-value pixel
         zerosr = np.hstack([dy[1:], 0.])
         zerosl = np.hstack([0., dy[:-1]])
@@ -75,7 +75,7 @@ def indexes(y, thres=0.3, min_dist=1):
 
 
 def centroid(x, y):
-    '''Computes the centroid for the specified data.
+    """Computes the centroid for the specified data.
     Refer to centroid2 for a more complete, albeit slower version.
 
     Parameters
@@ -89,11 +89,11 @@ def centroid(x, y):
     -------
     float
         Centroid of the data.
-    '''
+    """
     return np.sum(x * y) / np.sum(y)
 
 def centroid2(y, x=None, dx=1.):
-    '''Computes the centroid for the specified data.
+    """Computes the centroid for the specified data.
     Not intended to be used
 
     Parameters
@@ -106,7 +106,7 @@ def centroid2(y, x=None, dx=1.):
     -------
     (centroid, sd)
         Centroid and standard deviation of the data.
-    '''
+    """
     yt = np.array(y)
 
     if x is None:
@@ -118,7 +118,7 @@ def centroid2(y, x=None, dx=1.):
     return centroid, np.sqrt(var)
 
 def gaussian(x, ampl, center, dev):
-    '''Computes the Gaussian function.
+    """Computes the Gaussian function.
 
     Parameters
     ----------
@@ -135,11 +135,11 @@ def gaussian(x, ampl, center, dev):
     -------
     float
         Value of the specified Gaussian at *x*
-    '''
+    """
     return ampl * np.exp(-(x - float(center)) ** 2 / (2.0 * dev ** 2 + eps))
 
 def gaussian_fit(x, y, center_only=True):
-    '''Performs a Gaussian fitting of the specified data.
+    """Performs a Gaussian fitting of the specified data.
 
     Parameters
     ----------
@@ -155,7 +155,7 @@ def gaussian_fit(x, y, center_only=True):
     ndarray or float
         If center_only is `False`, returns the parameters of the Gaussian that fits the specified data
         If center_only is `True`, returns the center position of the Gaussian
-    '''
+    """
     initial = [np.max(y), x[0], (x[1] - x[0]) * 5]
     params, pcov = optimize.curve_fit(gaussian, x, y, initial)
 
@@ -166,7 +166,7 @@ def gaussian_fit(x, y, center_only=True):
 
 
 def interpolate(x, y, ind=None, width=10, func=gaussian_fit):
-    '''Tries to enhance the resolution of the peak detection by using
+    """Tries to enhance the resolution of the peak detection by using
     Gaussian fitting, centroid computation or an arbitrary function on the
     neighborhood of each previously detected peak index.
 
@@ -189,7 +189,7 @@ def interpolate(x, y, ind=None, width=10, func=gaussian_fit):
     -------
     ndarray :
         Array with the adjusted peak positions (in *x*)
-    '''
+    """
     if ind is None:
         ind = indexes(y)
 

@@ -2,7 +2,8 @@ import matplotlib.pyplot as plt
 
 
 def plot(x, y, ind):
-    '''Plots the original data with the peaks that were identified
+    """
+    Plots the original data with the peaks that were identified
 
     Parameters
     ----------
@@ -12,7 +13,7 @@ def plot(x, y, ind):
         Data on the y-axis
     ind : array-like
         Indexes of the identified peaks
-    '''
+    """
     plt.plot(x, y, '--')
     plt.plot(x[ind], y[ind], 'r+', ms=5, mew=2,
              label='{} peaks'.format(len(ind)))
