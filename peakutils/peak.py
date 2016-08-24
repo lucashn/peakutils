@@ -35,8 +35,25 @@ def indexes(y, thres=0.3, min_dist=1):
     thres = thres * (np.max(y) - np.min(y)) + np.min(y)
     min_dist = int(min_dist)
 
-    # find the peaks by using the first order difference
+    # compute first order difference
     dy = np.diff(y)
+  
+    # propagate left and right values successively to fill all plateau pixels (0-value)
+    zeros,=np.where(dy == 0)
+    while (len(zeros)):
+        # add pixels 2 by 2 to propagate left and right value onto the zero-value pixel
+        zerosr = np.hstack([dy[1:], 0.])
+        zerosl = np.hstack([0., dy[:-1]])
+
+        # replace 0 with right value if non zero
+        dy[zeros]=zerosr[zeros]
+        zeros,=np.where(dy == 0)
+
+        # replace 0 with left value if non zero
+        dy[zeros]=zerosl[zeros]
+        zeros,=np.where(dy == 0)
+
+    # find the peaks by using the first order difference
     peaks = np.where((np.hstack([dy, 0.]) < 0.)
                      & (np.hstack([0., dy]) > 0.)
                      & (y > thres))[0]
