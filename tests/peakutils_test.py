@@ -187,6 +187,35 @@ class Plateau(unittest.TestCase):
         # note: there are no peaks in the first and last series as the data
         # to the left of 0 and right of 19 is unknown
 
+class Float64(unittest.TestCase):
+
+    """Issue #11 (false alarm)"""
+    def setUp(self):
+        self.col = [
+            u'2161', u'183', u'167', u'270', u'164', u'475', u'327', u'279', u'0', 
+            u'183', u'360', u'81', u'81', u'81', u'81', u'45', u'81', u'0', u'81', u'81'
+        ]
+
+    def test_int_high_thres(self):
+        y = np.atleast_1d(self.col).astype('int')
+        peaks = peakutils.indexes(y, thres=0.3)
+        np.testing.assert_array_almost_equal(peaks, [])
+
+    def test_float64_high_thres(self):
+        y = np.atleast_1d(self.col).astype('float64')
+        peaks = peakutils.indexes(y, thres=0.3)
+        np.testing.assert_array_almost_equal(peaks, [])
+        
+    def test_int_low_thres(self):
+        y = np.atleast_1d(self.col).astype('int')
+        peaks = peakutils.indexes(y, thres=0.01)
+        np.testing.assert_array_almost_equal(peaks, [3, 5, 10, 16])
+
+    def test_float64_low_thres(self):
+        y = np.atleast_1d(self.col).astype('float64')
+        peaks = peakutils.indexes(y, thres=0.01)
+        np.testing.assert_array_almost_equal(peaks, [3, 5, 10, 16])
+
 if __name__ == '__main__':
     numpy.random.seed(1997)
     unittest.main()

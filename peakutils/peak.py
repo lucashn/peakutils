@@ -40,6 +40,7 @@ def indexes(y, thres=0.3, min_dist=1):
 
     # propagate left and right values successively to fill all plateau pixels (0-value)
     zeros,=np.where(dy == 0)
+    
     while len(zeros):
         # add pixels 2 by 2 to propagate left and right value onto the zero-value pixel
         zerosr = np.hstack([dy[1:], 0.])
