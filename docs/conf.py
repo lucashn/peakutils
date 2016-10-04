@@ -8,7 +8,7 @@ from better import better_theme_path
 extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.mathjax',
-    'sphinxcontrib.napoleon'
+    'sphinx.ext.napoleon'
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -25,7 +25,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'PeakUtils'
-copyright = '2014, Lucas Hermann Negri'
+copyright = '2014 - 2016, Lucas Hermann Negri'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
