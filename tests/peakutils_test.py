@@ -1,11 +1,13 @@
-import unittest
-import peakutils
 import os
+import unittest
+import warnings
+
 import numpy
 from numpy.testing import assert_array_almost_equal
 import scipy.signal
 import numpy as np
-
+import pandas as pd
+import peakutils
 
 def load(name):
     p = os.path.join(os.path.dirname(__file__), name)
@@ -99,6 +101,13 @@ class SimulatedData(unittest.TestCase):
         expected = numpy.array([1, 5])
         assert_array_almost_equal(out, expected)
 
+    def test_pandas_series(self):
+        x = ["a", "b", "c", "d", "e"]
+        y = [  0,   2,   0,  3,   0 ]
+        data = pd.Series(data=y, index=x)
+        out = peakutils.indexes(data, thres=0, min_dist=1)
+        expected = numpy.array([1, 3])
+        assert_array_almost_equal(out, expected)
 
 class Baseline(unittest.TestCase):
 
@@ -215,6 +224,19 @@ class Float64(unittest.TestCase):
         y = np.atleast_1d(self.col).astype('float64')
         peaks = peakutils.indexes(y, thres=0.01)
         np.testing.assert_array_almost_equal(peaks, [3, 5, 10, 16])
+
+class InterpolateExceptions(unittest.TestCase):
+    
+    """ Issue #14: convert fitting errors to warnings """
+    def test_interpolate_bounds(self):
+        x = np.arange(5)
+        y = np.array([0, 0, 1, 0, 0])
+        
+        with warnings.catch_warnings(record=True) as record:
+            for w in range(1, 10):
+                peakutils.interpolate(x, y, [2], width=w)
+        
+        self.assertGreater(len(record), 0)
 
 if __name__ == '__main__':
     numpy.random.seed(1997)

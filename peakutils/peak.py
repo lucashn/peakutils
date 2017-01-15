@@ -1,15 +1,20 @@
 """Peak detection algorithms."""
 
+import warnings
+
 import numpy as np
 from scipy import optimize
 from scipy.integrate import simps
+
+class FitError(Exception):
+    pass
 
 eps = np.finfo(float).eps
 
 def indexes(y, thres=0.3, min_dist=1):
     """Peak detection routine.
 
-    Finds the peaks in *y* by taking its first order difference. By using
+    Finds the numeric index of the peaks in *y* by taking its first order difference. By using
     *thres* and *min_dist* parameters, it is possible to reduce the number of
     detected peaks. *y* must be signed.
 
@@ -27,7 +32,7 @@ def indexes(y, thres=0.3, min_dist=1):
     Returns
     -------
     ndarray
-        Array containing the indexes of the peaks that were detected
+        Array containing the numeric indexes of the peaks that were detected
     """
     if isinstance(y, np.ndarray) and np.issubdtype(y.dtype, np.unsignedinteger):
         raise ValueError("y must be signed")
@@ -157,6 +162,10 @@ def gaussian_fit(x, y, center_only=True):
         If center_only is `False`, returns the parameters of the Gaussian that fits the specified data
         If center_only is `True`, returns the center position of the Gaussian
     """
+    if len(x) < 3:
+        # used RuntimeError to match errors raised in scipy.optimize
+        raise RuntimeError("At least 3 points required for Gaussian fitting")
+
     initial = [np.max(y), x[0], (x[1] - x[0]) * 5]
     params, pcov = optimize.curve_fit(gaussian, x, y, initial)
 
@@ -170,6 +179,9 @@ def interpolate(x, y, ind=None, width=10, func=gaussian_fit):
     """Tries to enhance the resolution of the peak detection by using
     Gaussian fitting, centroid computation or an arbitrary function on the
     neighborhood of each previously detected peak index.
+    
+    RuntimeErrors raised in the fitting function will be converted to warnings, with the peak
+    being mantained as the original one (in the ind array).
 
     Parameters
     ----------
@@ -182,7 +194,7 @@ def interpolate(x, y, ind=None, width=10, func=gaussian_fit):
         called with the default parameters.
     width : int
         Number of points (before and after) each peak index to pass to *func*
-        in order to encrease the resolution in *x*.
+        in order to increase the resolution in *x*.
     func : function(x,y)
         Function that will be called to detect an unique peak in the x,y data.
 
@@ -191,12 +203,22 @@ def interpolate(x, y, ind=None, width=10, func=gaussian_fit):
     ndarray :
         Array with the adjusted peak positions (in *x*)
     """
+    assert x.shape == y.shape
+    
     if ind is None:
         ind = indexes(y)
 
     out = []
-    for slice_ in (slice(i - width, i + width) for i in ind):
-        fit = func(x[slice_], y[slice_])
-        out.append(fit)
+    
+    for i in ind:
+        slice_ = slice(i - width, i + width + 1)
+        
+        try:
+            best_idx = func(x[slice_], y[slice_])
+        except RuntimeError as e:
+            warnings.warn(str(e))
+            best_idx = i
+
+        out.append(best_idx)
 
     return np.array(out)
