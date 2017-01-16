@@ -6,9 +6,6 @@ import numpy as np
 from scipy import optimize
 from scipy.integrate import simps
 
-class FitError(Exception):
-    pass
-
 eps = np.finfo(float).eps
 
 def indexes(y, thres=0.3, min_dist=1):
