@@ -50,5 +50,5 @@ setup(
     ],
     license='MIT',
     test_suite='tests',
-    keywords='peak detection seatch gaussian centroid baseline maximum',
+    keywords='peak detection search gaussian centroid baseline maximum',
 )
