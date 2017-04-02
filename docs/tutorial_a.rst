@@ -18,7 +18,7 @@ Importing the libraries
 Preparing the data
 ------------------
 
-Now, lets generate some noisy data with two gaussians:
+Lets generate some noisy data from two Gaussians:
 
 .. code:: python
 
@@ -38,7 +38,7 @@ Getting a first estimate of the peaks
 -------------------------------------
 
 By using peakutils.indexes, we can get the indexes of the peaks from the
-data. Due to noise, it will be just a rough approximation.
+data. Due to the noise, it will be just a rough approximation.
 
 .. code:: python
 
@@ -60,8 +60,8 @@ data. Due to noise, it will be just a rough approximation.
 Enhancing the resolution by interpolation
 -----------------------------------------
 
-We can enhance the resolution by interpolation. Here, we will try to fit
-a Gaussian near each peak that we have just detected.
+We can enhance the resolution by using interpolation. We will try to fit
+a Gaussian near each previously detected peak.
 
 .. code:: python
 
@@ -76,9 +76,9 @@ a Gaussian near each peak that we have just detected.
 Estimating and removing the baseline
 ------------------------------------
 
-It is common for data to have a baseline that may not be desired.
-*PeakUtils* implements one function for estimating the baseline by using
-an iterative polynomial regression algorithm:
+It is common for data to have an undesired baseline.
+*PeakUtils* implements a function for estimating the baseline by using
+an iterative polynomial regression algorithm.
 
 .. code:: python
 
@@ -101,10 +101,11 @@ an iterative polynomial regression algorithm:
 .. image:: _static/tut_a_4.png
 
 
-Related functionality in Scipy
+Related functionality in SciPy
 ------------------------------
 
-Scipy also implements functions that can be used for peak detection.
+SciPy also implements functions that can be used for peak detection.
+
 Some examples:
 
 -  `scipy.signal.find\_peaks\_cwt <http://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.find_peaks_cwt.html>`__

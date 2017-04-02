@@ -1,10 +1,10 @@
 Complete Reference
 ==================
 
-The contents of the sub-modules *baseline* and *peak* are imported to 
-*peaktuils*, and it is not needed to import them directly.
+The contents of the submodules *baseline* and *peak* are imported to 
+*peaktuils*, and there is no need to import them directly.
 
-The *plot* sub-module must be explicitly imported due to its *matplotlib*
+An exception is the *plot* submodule that must be explicitly imported due to its *matplotlib*
 dependency.
 
 peakutils.baseline
