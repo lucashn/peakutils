@@ -43,6 +43,10 @@ def indexes(y, thres=0.3, min_dist=1):
     # propagate left and right values successively to fill all plateau pixels (0-value)
     zeros,=np.where(dy == 0)
     
+    # check if the singal is totally flat
+    if len(zeros) == len(y) - 1:
+        return np.array([])
+    
     while len(zeros):
         # add pixels 2 by 2 to propagate left and right value onto the zero-value pixel
         zerosr = np.hstack([dy[1:], 0.])
@@ -61,6 +65,7 @@ def indexes(y, thres=0.3, min_dist=1):
                      & (np.hstack([0., dy]) > 0.)
                      & (y > thres))[0]
 
+    # handle multiple peaks, respecting the minimum distance
     if peaks.size > 1 and min_dist > 1:
         highest = peaks[np.argsort(y[peaks])][::-1]
         rem = np.ones(y.size, dtype=bool)

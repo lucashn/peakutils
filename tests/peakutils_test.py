@@ -1,6 +1,7 @@
 import os
 import unittest
 import warnings
+import itertools
 
 import numpy
 from numpy.testing import assert_array_almost_equal
@@ -195,6 +196,24 @@ class Plateau(unittest.TestCase):
         np.testing.assert_array_equal(idx, [8])
         # note: there are no peaks in the first and last series as the data
         # to the left of 0 and right of 19 is unknown
+        
+    def test_flat(self):
+        ra = (0.2, 0.4, 0.6, 0.8, 0.95)
+        rb = (1, 2, 3, 4, 5, 6)
+        N = 20
+        
+        # all equal
+        for t, m in itertools.product(ra, rb):
+            y = np.ones(N)
+            peakutils.indexes(y, thres=t, min_dist=m)
+            
+        # a single peak
+        for t, m in itertools.product(ra, rb):
+            for z in range(m + 1, N - m):
+                y = np.ones(N)
+                y[z] = 1e3
+                p = peakutils.indexes(y, thres=t, min_dist=m)
+                self.assertEqual(p, np.array([z]))
 
 class Float64(unittest.TestCase):
 
@@ -237,6 +256,17 @@ class InterpolateExceptions(unittest.TestCase):
                 peakutils.interpolate(x, y, [2], width=w)
         
         self.assertGreater(len(record), 0)
+        
+class HighEnvelope(unittest.TestCase):
+    
+    def test_up_envelope(self):
+        data = np.array([0, 2, 0, 0, 4, 0, 0, 0, 7, 0, 0, 0, 0, 9, 0, 0, 0, 11, 0, 0, 0, 0, 0, 9, 0,
+                         0, 0, 0, 7, 0, 0, 4, 0, 0, 3, 0, 0, 0, 1])
+        env = peakutils.envelope(data, 5)
+        tol = 1.05
+        
+        for a, b in zip(data, env):
+            self.assertLess(a, b * tol)
 
 if __name__ == '__main__':
     numpy.random.seed(1997)
