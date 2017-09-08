@@ -1,9 +1,8 @@
 PeakUtils
 =========
 
-.. image:: https://pypip.in/version/PeakUtils/badge.png?style=flat
-    :target: https://pypi.python.org/pypi/PeakUtils
-    :alt: Latest Version
+.. image:: https://zenodo.org/badge/102883046.svg
+   :target: https://zenodo.org/badge/latestdoi/102883046
 
 This package provides utilities related to the detection of peaks on 1D data.
 Includes functions to estimate baselines, finding the indexes of peaks in the data
