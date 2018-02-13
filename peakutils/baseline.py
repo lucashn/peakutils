@@ -43,7 +43,7 @@ def baseline(y, deg=None, max_it=None, tol=None):
     coeffs = np.ones(order)
 
     # try to avoid numerical issues
-    cond = math.pow(y.max(), 1. / order)
+    cond = math.pow(abs(y).max(), 1. / order)
     x = np.linspace(0., cond, y.size)
     base = y.copy()
 

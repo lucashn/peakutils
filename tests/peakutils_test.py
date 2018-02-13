@@ -126,6 +126,10 @@ class Baseline(unittest.TestCase):
             self.assertTrue(-0.1 <= base.min() < 0.1)
             mult *= 10
 
+    def test_negative(self):
+        data = np.array([-1, -2, -3, -4, -3, -2, -1] * 10)
+        base = peakutils.baseline(data)
+        self.assertEqual(data.shape, base.shape)
 
 class Prepare(unittest.TestCase):
 
