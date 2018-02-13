@@ -9,7 +9,7 @@ Includes functions to estimate baselines, finding the indexes of peaks in the da
 and performing Gaussian fitting or centroid computation to further increase the
 resolution of the peak detection.
 
-The documentation is available at http://pythonhosted.org/PeakUtils .
+The documentation is available at http://peakutils.readthedocs.io/en/latest .
 
 Installation
 ------------
