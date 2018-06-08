@@ -72,6 +72,7 @@ class SimulatedData(unittest.TestCase):
              numpy.random.random(x.size) * 0.2)).astype(dtype)
 
         filtered = scipy.signal.savgol_filter(y, 51, 3).astype(dtype)
+        
         idx = peakutils.indexes(filtered, thres=0.3, min_dist=100)
         peaks = peakutils.interpolate(x, y, idx, width=30)
         self.assertEqual(idx.size, len(centers))
@@ -109,6 +110,26 @@ class SimulatedData(unittest.TestCase):
         out = peakutils.indexes(data, thres=0, min_dist=1)
         expected = numpy.array([1, 3])
         assert_array_almost_equal(out, expected)
+    
+    def test_absolute_threshold(self):
+        x = [0, 5, 0, 8, 0, 15, 0]
+        out1 = peakutils.indexes(x, thres=3, thres_abs=True)
+        assert_array_almost_equal(out1, [1, 3, 5])
+
+        out2 = peakutils.indexes(x, thres=5, thres_abs=True)
+        assert_array_almost_equal(out2, [3, 5])
+
+        out3 = peakutils.indexes(x, thres=7, thres_abs=True)
+        assert_array_almost_equal(out3, [3, 5])
+
+        out4 = peakutils.indexes(x, thres=14, thres_abs=True)
+        assert_array_almost_equal(out4, [5])
+
+        out5 = peakutils.indexes(x, thres=15, thres_abs=True)
+        assert_array_almost_equal(out5, [])
+
+        out6 = peakutils.indexes(x, thres=16, thres_abs=True)
+        assert_array_almost_equal(out6, [])
 
 class Baseline(unittest.TestCase):
 

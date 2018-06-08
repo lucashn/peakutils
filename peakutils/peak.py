@@ -8,7 +8,7 @@ from scipy.integrate import simps
 
 eps = np.finfo(float).eps
 
-def indexes(y, thres=0.3, min_dist=1):
+def indexes(y, thres=0.3, min_dist=1, thres_abs=False):
     """Peak detection routine.
 
     Finds the numeric index of the peaks in *y* by taking its first order difference. By using
@@ -25,6 +25,9 @@ def indexes(y, thres=0.3, min_dist=1):
     min_dist : int
         Minimum distance between each detected peak. The peak with the highest
         amplitude is preferred to satisfy this constraint.
+    thres_abs: boolean
+        If True, the thres value will be interpreted as an absolute value, instead of
+        a normalized threshold.
 
     Returns
     -------
@@ -34,7 +37,9 @@ def indexes(y, thres=0.3, min_dist=1):
     if isinstance(y, np.ndarray) and np.issubdtype(y.dtype, np.unsignedinteger):
         raise ValueError("y must be signed")
 
-    thres = thres * (np.max(y) - np.min(y)) + np.min(y)
+    if not thres_abs:
+        thres = thres * (np.max(y) - np.min(y)) + np.min(y)
+        
     min_dist = int(min_dist)
 
     # compute first order difference
@@ -63,7 +68,7 @@ def indexes(y, thres=0.3, min_dist=1):
     # find the peaks by using the first order difference
     peaks = np.where((np.hstack([dy, 0.]) < 0.)
                      & (np.hstack([0., dy]) > 0.)
-                     & (y > thres))[0]
+                     & (np.greater(y, thres)))[0]
 
     # handle multiple peaks, respecting the minimum distance
     if peaks.size > 1 and min_dist > 1:
