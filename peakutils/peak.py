@@ -48,22 +48,35 @@ def indexes(y, thres=0.3, min_dist=1, thres_abs=False):
     # propagate left and right values successively to fill all plateau pixels (0-value)
     zeros,=np.where(dy == 0)
     
-    # check if the singal is totally flat
+    # check if the signal is totally flat
     if len(zeros) == len(y) - 1:
         return np.array([])
-    
-    while len(zeros):
-        # add pixels 2 by 2 to propagate left and right value onto the zero-value pixel
-        zerosr = np.hstack([dy[1:], 0.])
-        zerosl = np.hstack([0., dy[:-1]])
 
-        # replace 0 with right value if non zero
-        dy[zeros]=zerosr[zeros]
-        zeros,=np.where(dy == 0)
+    if len(zeros):
+        # compute first order difference of zero indexes
+        zeros_diff = np.diff(zeros)
+        # check when zeros are not chained together
+        zeros_diff_not_one, = np.add(np.where(zeros_diff != 1), 1)
+        # make an array of the chained zero indexes
+        zero_plateaus = np.split(zeros, zeros_diff_not_one)
 
-        # replace 0 with left value if non zero
-        dy[zeros]=zerosl[zeros]
-        zeros,=np.where(dy == 0)
+        # fix if leftmost value in dy is zero
+        if zero_plateaus[0][0] == 0:
+            dy[zero_plateaus[0]] = dy[zero_plateaus[0][-1] + 1]
+            zero_plateaus = np.delete(zero_plateaus, 0)
+
+        # fix if rightmost value of dy is zero
+        if zero_plateaus[-1][-1] == len(dy) - 1:
+            dy[zero_plateaus[-1]] = dy[zero_plateaus[-1][0] - 1]
+            zero_plateaus = np.delete(zero_plateaus, -1)
+
+        # for each chain of zero indexes
+        for plateau in zero_plateaus:
+            median = np.median(plateau)
+            # set leftmost values to leftmost non zero values
+            dy[plateau[plateau < median]] = dy[plateau[0] - 1]
+            # set rightmost and middle values to rightmost non zero values
+            dy[plateau[plateau >= median]] = dy[plateau[-1] + 1]
 
     # find the peaks by using the first order difference
     peaks = np.where((np.hstack([dy, 0.]) < 0.)
