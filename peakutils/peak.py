@@ -63,12 +63,12 @@ def indexes(y, thres=0.3, min_dist=1, thres_abs=False):
         # fix if leftmost value in dy is zero
         if zero_plateaus[0][0] == 0:
             dy[zero_plateaus[0]] = dy[zero_plateaus[0][-1] + 1]
-            zero_plateaus = np.delete(zero_plateaus, 0)
+            zero_plateaus.pop(0)
 
         # fix if rightmost value of dy is zero
-        if zero_plateaus[-1][-1] == len(dy) - 1:
+        if len(zero_plateaus) and zero_plateaus[-1][-1] == len(dy) - 1:
             dy[zero_plateaus[-1]] = dy[zero_plateaus[-1][0] - 1]
-            zero_plateaus = np.delete(zero_plateaus, -1)
+            zero_plateaus.pop(-1)
 
         # for each chain of zero indexes
         for plateau in zero_plateaus:
