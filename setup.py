@@ -26,12 +26,13 @@ class my_clean(Command):
     def finalize_options(self):
         pass
 
+
 with open('README.rst') as readme:
     long_description = readme.read()
 
 setup(
     name='PeakUtils',
-    version='1.2.0',
+    version='1.3.0',
     description='Peak detection utilities for 1D data',
     author='Lucas Hermann Negri',
     author_email='lucashnegri@gmail.com',
