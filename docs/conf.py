@@ -25,7 +25,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'PeakUtils'
-copyright = '2014 - 2018, Lucas Hermann Negri'
+copyright = '2014 - 2019, Lucas Hermann Negri'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
