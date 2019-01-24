@@ -1,47 +1,20 @@
-﻿from setuptools import setup, Command
-
-
-class my_clean(Command):
-
-    description = "Removes the generated files from the directory"
-    user_options = []
-
-    def initialize_options(self):
-        pass
-
-    def run(self):
-        import os
-        import shutil
-
-        try:
-            os.remove('MANIFEST')
-        except:
-            pass
-
-        dirs = ['peakutils/__pycache__', 'PeakUtils.egg-info', 'build', 'dist']
-
-        for dir in dirs:
-            shutil.rmtree(dir, True)
-
-    def finalize_options(self):
-        pass
-
+﻿from setuptools import setup
 
 with open('README.rst') as readme:
     long_description = readme.read()
 
 setup(
     name='PeakUtils',
-    version='1.3.0',
+    version='1.3.1',
     description='Peak detection utilities for 1D data',
+    long_description=long_description,
+    long_description_content_type="text/markdown",
     author='Lucas Hermann Negri',
     author_email='lucashnegri@gmail.com',
     url='https://bitbucket.org/lucashnegri/peakutils',
     packages=['peakutils'],
     install_requires=['numpy', 'scipy'],
-    cmdclass={
-        'clean': my_clean,
-    },
+    tests_require=['pandas'],
     classifiers=[
         'Development Status :: 5 - Production/Stable',
         'License :: OSI Approved :: MIT License',
