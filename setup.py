@@ -8,7 +8,7 @@ setup(
     version='1.3.1',
     description='Peak detection utilities for 1D data',
     long_description=long_description,
-    long_description_content_type="text/markdown",
+    long_description_content_type="text/x-rst",
     author='Lucas Hermann Negri',
     author_email='lucashnegri@gmail.com',
     url='https://bitbucket.org/lucashnegri/peakutils',
