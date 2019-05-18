@@ -8,6 +8,7 @@ from scipy.integrate import simps
 
 eps = np.finfo(float).eps
 
+
 def indexes(y, thres=0.3, min_dist=1, thres_abs=False):
     """Peak detection routine.
 
@@ -32,22 +33,23 @@ def indexes(y, thres=0.3, min_dist=1, thres_abs=False):
     Returns
     -------
     ndarray
-        Array containing the numeric indexes of the peaks that were detected
+        Array containing the numeric indexes of the peaks that were detected.
+        When using with Pandas DataFrames, iloc should be used to access the values at the returned positions.
     """
     if isinstance(y, np.ndarray) and np.issubdtype(y.dtype, np.unsignedinteger):
         raise ValueError("y must be signed")
 
     if not thres_abs:
         thres = thres * (np.max(y) - np.min(y)) + np.min(y)
-        
+
     min_dist = int(min_dist)
 
     # compute first order difference
     dy = np.diff(y)
 
     # propagate left and right values successively to fill all plateau pixels (0-value)
-    zeros,=np.where(dy == 0)
-    
+    zeros, = np.where(dy == 0)
+
     # check if the signal is totally flat
     if len(zeros) == len(y) - 1:
         return np.array([])
@@ -79,9 +81,11 @@ def indexes(y, thres=0.3, min_dist=1, thres_abs=False):
             dy[plateau[plateau >= median]] = dy[plateau[-1] + 1]
 
     # find the peaks by using the first order difference
-    peaks = np.where((np.hstack([dy, 0.]) < 0.)
-                     & (np.hstack([0., dy]) > 0.)
-                     & (np.greater(y, thres)))[0]
+    peaks = np.where(
+        (np.hstack([dy, 0.0]) < 0.0)
+        & (np.hstack([0.0, dy]) > 0.0)
+        & (np.greater(y, thres))
+    )[0]
 
     # handle multiple peaks, respecting the minimum distance
     if peaks.size > 1 and min_dist > 1:
@@ -118,7 +122,8 @@ def centroid(x, y):
     """
     return np.sum(x * y) / np.sum(y)
 
-def centroid2(y, x=None, dx=1.):
+
+def centroid2(y, x=None, dx=1.0):
     """Computes the centroid for the specified data.
     Not intended to be used
 
@@ -136,12 +141,13 @@ def centroid2(y, x=None, dx=1.):
     yt = np.array(y)
 
     if x is None:
-        x = np.arange(yt.size, dtype='float') * dx
+        x = np.arange(yt.size, dtype="float") * dx
 
     normaliser = simps(yt, x)
     centroid = simps(x * yt, x) / normaliser
     var = simps((x - centroid) ** 2 * yt, x) / normaliser
     return centroid, np.sqrt(var)
+
 
 def gaussian(x, ampl, center, dev):
     """Computes the Gaussian function.
@@ -163,6 +169,7 @@ def gaussian(x, ampl, center, dev):
         Value of the specified Gaussian at *x*
     """
     return ampl * np.exp(-(x - float(center)) ** 2 / (2.0 * dev ** 2 + eps))
+
 
 def gaussian_fit(x, y, center_only=True):
     """Performs a Gaussian fitting of the specified data.
@@ -224,15 +231,15 @@ def interpolate(x, y, ind=None, width=10, func=gaussian_fit):
         Array with the adjusted peak positions (in *x*)
     """
     assert x.shape == y.shape
-    
+
     if ind is None:
         ind = indexes(y)
 
     out = []
-    
+
     for i in ind:
         slice_ = slice(i - width, i + width + 1)
-        
+
         try:
             best_idx = func(x[slice_], y[slice_])
         except RuntimeError as e:
