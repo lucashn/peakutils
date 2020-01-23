@@ -5,7 +5,7 @@ with open('README.rst') as readme:
 
 setup(
     name='PeakUtils',
-    version='1.3.2',
+    version='1.3.3',
     description='Peak detection utilities for 1D data',
     long_description=long_description,
     long_description_content_type="text/x-rst",
