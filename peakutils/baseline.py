@@ -48,7 +48,7 @@ def baseline(y, deg=None, max_it=None, tol=None):
     base = y.copy()
 
     vander = np.vander(x, order)
-    vander_pinv = LA.pinv2(vander)
+    vander_pinv = LA.pinv(vander)
 
     for _ in range(max_it):
         coeffs_new = np.dot(vander_pinv, y)
